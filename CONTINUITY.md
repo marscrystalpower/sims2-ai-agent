@@ -35,6 +35,10 @@ On a confirmed departure or changed lot session, the visit is closed with a comp
 
 The factual recap is deliberately limited. The agent should update significant events, relationship context, intentions and unresolved threads before an intended departure or after reviewing a closed visit. No silent LLM summarizer runs in the background. Missed events during outages, very brief transitions, save rollbacks and crashes cannot be reconstructed automatically. Loading an earlier game save does not rewind continuity notes; reconcile those explicitly or use a separate continuity directory.
 
+## Lasting consequences
+
+Preserve lasting consequences independently of the rolling visit history. After confirming a major milestone, record it promptly in significantEvents and relevant relationships/unresolved notes; do not wait for departure if it could otherwise be lost. Before planned departure, review meaningful developments and preserve unresolved consequences, then verify the revision-checked write succeeded. On arrival, review those lasting notes alongside the latest recap before choosing intentions. When note limits are reached, merge and condense while retaining who was involved, what was observed, the evidence source, and any established ongoing consequence. Do not drop an unresolved consequence merely because it is old or many households have been played. Update it when evidence shows resolution, reconciliation or changed circumstances; do not invent feelings or assume permanence. A hypothetical example such as Don leaving Cassandra at the altar is a policy example, not an event to insert into a save's history. Unexpected exits and unattended play can still leave gaps: this is an agent responsibility, not automatic narrative detection.
+
 ## Storage and recovery
 
 Default: `continuity-data/households.sqlite3` beside the API. Override with `--continuity-directory` and pass the same directory to the notes command using `--directory`. SQLite transactions protect updates; the local HTTP service exposes reads only. Do not run multiple continuity workers against the same store.
