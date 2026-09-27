@@ -127,6 +127,7 @@ class NeedTrendTracker:
 
 need_trend_tracker = NeedTrendTracker()
 lot_session = LotSession()
+configured_game_pid = None
 
 
 def load_name_context(neighborhood, path):
@@ -161,6 +162,9 @@ def identity(nid, context):
 def lot_snapshot(mods, context=None):
     with (mods / "TS2Bridge-state.json").open("r", encoding="utf-8") as file:
         state = json.load(file)
+    # Native schema1 state omits pid (event records include it).
+    if state.get('pid') is None:
+        state['pid'] = configured_game_pid
     age = None
     try:
         when = datetime.fromisoformat(state['sampledUtc'].replace('Z', '+00:00'))
@@ -712,6 +716,7 @@ class ApiHandler(BaseHTTPRequestHandler):
 
 
 def main():
+    global configured_game_pid
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mods", type=Path, default=Path(__file__).resolve().parent,
                         help="folder containing TS2Bridge-state.json and TS2Bridge-events.jsonl")
@@ -721,6 +726,7 @@ def main():
     parser.add_argument('--alarm-pid', type=int, help='Enable read-only restriction alarm for this game PID')
     parser.add_argument('--alarm-exe', type=Path, default=DEFAULT_EXE)
     args = parser.parse_args()
+    configured_game_pid = args.alarm_pid
     if not args.mods.is_dir():
         parser.error("mods directory does not exist")
     try:
