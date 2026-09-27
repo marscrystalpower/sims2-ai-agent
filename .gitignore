@@ -19,3 +19,9 @@ TS2Bridge-*-names.json
 TS2Bridge-*-identity-overrides.json
 *-observe.json
 *-verification.json
+
+# Private runtime household continuity
+continuity-data/
+*.sqlite3
+*.sqlite3-*
+household-notes.json
