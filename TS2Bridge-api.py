@@ -81,7 +81,8 @@ class NeedTrendTracker:
                 self.trends = {}
                 return {}
             sample = {
-                "time": when, "family": household["currentFamily"],
+                "time": when, "family": (household["currentFamily"],
+                                          household.get('lotSessionId'), household.get('gamePid')),
                 "sims": {(sim["nid"], sim["oid"]): sim for sim in household["sims"]},
             }
             if (self.history and self.history[-1]["time"] == when and
@@ -751,3 +752,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
