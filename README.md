@@ -78,3 +78,8 @@ The background watcher observes departures every2 seconds. A confirmed exit, a f
 Alarm retention is now per active household visit: confirmed exit/family change discards its in-memory alarms and resets the alarm cursor. Transient read failures within a visit still preserve deduplication. An old cursor reports reset=true. Native logs are not deleted or truncated. Store concise story continuity by neighborhood and family separately, and retire the old visit's action queue/inspection cache when lotSessionId changes. The API does not itself store story notes or confirm saves. Across different neighborhoods the operator must restart with the corresponding name map; family and NID alone are not globally unique.
 
 Live transition test: family3 -> neighborhood -> Greenman family2. Neighborhood returned no Sims/pairs and unknown restriction; Greenman returned only Daisy/Rose/Jason. Stale/process/visit guards are covered by offline tests. Restarting the game requires restarting the API to bind its new PID.
+
+
+## Persistent household continuity
+
+The combined API now includes local household memory: `/v1/continuity` loads the active household's notes and visit history; `/v1/decision` provides a compact current summary. The background worker records selected meaningful events and closes visits on departure, without playing the game or claiming a save. G001 is always test-only and never seeds N001 records. See [CONTINUITY.md](CONTINUITY.md) for note editing, revision checks, storage limits, save-instance separation and private backup instructions. Runtime notes stay out of this public repository. This feature requires an explicit neighborhood configuration; restart the API after updating source.
