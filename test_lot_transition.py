@@ -14,6 +14,15 @@ spec.loader.exec_module(api)
 
 
 class TransitionTests(unittest.TestCase):
+    def test_trends_reset_on_same_family_new_visit(self):
+        tracker = api.NeedTrendTracker()
+        now = datetime.now(timezone.utc)
+        sim = {'nid': 1, 'oid': 2, 'ghostFlagsRaw': 0, 'needsRaw': {'hunger': 50}}
+        household = {'currentFamily': 3, 'lotSessionId': 'first', 'gamePid': 1, 'sims': [sim]}
+        tracker.update(household, now, True)
+        newer = dict(household, lotSessionId='second', sims=[dict(sim, needsRaw={'hunger': 10})])
+        self.assertEqual(tracker.update(newer, now+timedelta(seconds=5), True), {})
+
     def test_session_lifecycle(self):
         tracker = LotSession()
         state = {'pid': 1, 'currentFamily': 3, 'status': 'lot', 'sampledUtc': '2026-01-01T00:00:00Z'}
@@ -71,4 +80,5 @@ class TransitionTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
 
