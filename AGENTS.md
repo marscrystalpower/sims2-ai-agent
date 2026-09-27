@@ -46,6 +46,8 @@ Do not force deaths, births, emergencies, use cheats, reload to erase consequenc
 
 ## Continuity and evidence
 
+Scope active play to the API's lotSessionId. On a new visit, discard the previous visit's action queue, screenshot deduplication state, and transient observations; resynchronize event/alarm cursors and read the new household before acting. Keep concise saved story continuity separately by neighborhood and family rather than replaying old telemetry. Unavailable readings during loading mean wait for fresh data, not that needs are safe. A lot change is not proof the player saved. Household IDs and Sim NIDs may repeat across neighborhoods; reconfigure the name map when changing neighborhoods. Do not delete native logs or story records merely to clear active context.
+
 Maintain `STORY.md` as a small continuity note when meaningful events occur: confirmed household identity, established names, significant events, a few current intentions, and unresolved questions. Label observations, user reports, and narrative interpretations. Use game time when available and distinguish disposable test events from an ongoing saved storyline. Do not promote test births or deaths into permanent canon without evidence they belong to the user's continuing save.
 
 Prefer neighborhood plus NID for identity when reliable; do not infer identity from list position. Name maps may lag new births, and a loaded Sim is not necessarily physically present on the lot. Preserve uncertainty rather than inventing missing biography or relationship causes. Read current observations before treating old notes as live state.
