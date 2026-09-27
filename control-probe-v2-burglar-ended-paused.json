@@ -1,0 +1,30 @@
+{
+  "probe": "control-candidates-2",
+  "sampledUtc": "2026-09-27T03:01:02.608032+00:00",
+  "pid": 22480,
+  "operatorLabel": "burglar-apprehended-paused-normal-controls-user-reported",
+  "raw": {
+    "offset68Byte": 0,
+    "offset69Byte": 0,
+    "offset80Signed": 1,
+    "offset84Signed": 1,
+    "buildBuyBlockerCountRaw": 0,
+    "buildBuyRestrictionActiveCandidate": false
+  },
+  "buildModeAvailable": null,
+  "buyModeAvailable": null,
+  "saveAvailable": null,
+  "interpretation": "Unvalidated candidate fields; not an emergency detector",
+  "apiContext": {
+    "fresh": true,
+    "sampleAgeSeconds": 4.7,
+    "screenCheckRecommended": true,
+    "sampledUtc": "2026-09-27T03:00:58Z",
+    "status": "lot",
+    "currentFamily": 3,
+    "gamePaused": true,
+    "gameModeProbeRaw": 0,
+    "gameHour": 3,
+    "gameMinute": 24
+  }
+}

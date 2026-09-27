@@ -1,0 +1,28 @@
+{
+  "probe": "control-candidates-1",
+  "sampledUtc": "2026-09-27T02:30:31.885177+00:00",
+  "pid": 22480,
+  "operatorLabel": "normal-live",
+  "raw": {
+    "offset68Byte": 0,
+    "offset69Byte": 0,
+    "offset80Signed": 1,
+    "offset84Signed": 1
+  },
+  "buildModeAvailable": null,
+  "buyModeAvailable": null,
+  "saveAvailable": null,
+  "interpretation": "Unvalidated candidate fields; not an emergency detector",
+  "apiContext": {
+    "fresh": true,
+    "sampleAgeSeconds": 2.9,
+    "screenCheckRecommended": false,
+    "sampledUtc": "2026-09-27T02:30:29Z",
+    "status": "lot",
+    "currentFamily": 3,
+    "gamePaused": false,
+    "gameModeProbeRaw": 0,
+    "gameHour": 16,
+    "gameMinute": 48
+  }
+}

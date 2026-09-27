@@ -1,0 +1,382 @@
+{
+  "fresh": true,
+  "controlRestriction": {
+    "status": "ok",
+    "sampledUtc": "2026-09-26T20:40:01.984546-07:00",
+    "blockerCount": 0,
+    "restrictionActive": false,
+    "saveEnableCounterRaw": 1,
+    "saveGateRestricted": false,
+    "reasons": [],
+    "currentFamily": 3,
+    "error": null
+  },
+  "screenCheckReason": "game_paused",
+  "household": {
+    "api": 1,
+    "sourceSchema": 1,
+    "bridge": "1.33",
+    "sampledUtc": "2026-09-27T03:39:59Z",
+    "status": "lot",
+    "gameHour": 0,
+    "gameMinute": 17,
+    "pausedProbeRaw": 1,
+    "gamePaused": true,
+    "gameModeProbeRaw": 0,
+    "currentFamily": 3,
+    "householdFunds": 2296,
+    "fundsProbeRaw": 2296,
+    "selectedNid": 21,
+    "neighborhoodContext": {
+      "code": "G001",
+      "verifiedByGame": false
+    },
+    "sims": [
+      {
+        "nid": 21,
+        "oid": 206,
+        "hunger": 55.03,
+        "familyNumber": 3,
+        "matchesCurrentFamily": true,
+        "wasHouseholdMemberThisLot": true,
+        "schoolGradeRaw": 0,
+        "jobLevelRaw": 3,
+        "jobPerformanceRaw": 0,
+        "ageRaw": 19,
+        "ghostFlagsRaw": 0,
+        "bodyFlagsRaw": 16,
+        "genderRaw": 1,
+        "genderPreferenceRaw": {
+          "male": 497,
+          "female": 506
+        },
+        "needsRaw": {
+          "hunger": 55.03,
+          "energy": -32.16,
+          "comfort": 79.58,
+          "hygiene": 76.07,
+          "bladder": 42.6,
+          "environment": 73.84,
+          "social": 60.55,
+          "fun": 74.67
+        },
+        "skillsRaw": {
+          "cleaning": 200,
+          "cooking": 213,
+          "charisma": 300,
+          "mechanical": 100,
+          "creativity": 230,
+          "body": 300,
+          "logic": 101
+        },
+        "hobbyEnthusiasmProbeRaw": {
+          "0xCC": 134,
+          "0xCD": 0,
+          "0xCE": 2,
+          "0xCF": 1,
+          "0xD0": 15,
+          "0xD1": 0,
+          "0xD2": 0,
+          "0xD3": 0,
+          "0xD4": 0,
+          "0xD5": 206
+        },
+        "predestinedHobbyProbeRaw": 213,
+        "personalityRaw": {
+          "neat": 600,
+          "outgoing": 700,
+          "active": 500,
+          "playful": 300,
+          "nice": 400
+        },
+        "aspirationRaw": 17,
+        "lifetimeAspirationRaw": {
+          "meter": 12720,
+          "unlock": 6,
+          "spent": 5
+        },
+        "loaded": true,
+        "inCurrentHousehold": true,
+        "hobbyEnthusiasmRaw": {
+          "cuisine": 134,
+          "arts_and_crafts": 0,
+          "film_and_literature": 2,
+          "sports": 1,
+          "games": 15,
+          "nature": 0,
+          "tinkering": 0,
+          "fitness": 0,
+          "science": 0,
+          "music_and_dance": 206
+        },
+        "hobbyEnthusiasmValue": {
+          "cuisine": 134,
+          "arts_and_crafts": 0,
+          "film_and_literature": 2,
+          "sports": 1,
+          "games": 15,
+          "nature": 0,
+          "tinkering": 0,
+          "fitness": 0,
+          "science": 0,
+          "music_and_dance": 206
+        },
+        "hobbyEnthusiasmPoints": {
+          "cuisine": 1,
+          "arts_and_crafts": 0,
+          "film_and_literature": 0,
+          "sports": 0,
+          "games": 0,
+          "nature": 0,
+          "tinkering": 0,
+          "fitness": 0,
+          "science": 0,
+          "music_and_dance": 2
+        },
+        "oneTrueHobby": "music_and_dance",
+        "interestPoints": {
+          "politics": 5,
+          "money": 5,
+          "environment": 5,
+          "crime": 5,
+          "entertainment": 6,
+          "culture": 6,
+          "food": 6,
+          "health": 5,
+          "fashion": 5,
+          "sports": 5,
+          "paranormal": 5,
+          "travel": 5,
+          "work": 5,
+          "weather": 5,
+          "animals": 5,
+          "school": 5,
+          "toys": 5,
+          "sci_fi": 5
+        },
+        "interactiveOnLot": null,
+        "gameGender": "female",
+        "bodyTraits": [
+          "fit"
+        ],
+        "isPregnant": false,
+        "pregnancyStage": null,
+        "genderPreference": {
+          "male": 4.97,
+          "female": 5.06
+        },
+        "ageStage": "adult",
+        "skillLevels": {
+          "cleaning": 2,
+          "cooking": 2,
+          "charisma": 3,
+          "mechanical": 1,
+          "creativity": 2,
+          "body": 3,
+          "logic": 1
+        },
+        "personalityPoints": {
+          "neat": 6,
+          "outgoing": 7,
+          "active": 5,
+          "playful": 3,
+          "nice": 4
+        },
+        "aspirationType": null,
+        "activeAspirations": [
+          {
+            "bit": 1,
+            "type": "romance"
+          },
+          {
+            "bit": 16,
+            "type": "popularity"
+          }
+        ],
+        "benefitPoints": {
+          "unlocked": 6,
+          "spent": 5,
+          "unspent": 1
+        },
+        "hungerBand": "ok",
+        "bladderBand": "ok",
+        "energyBand": "warning",
+        "identity": {
+          "firstName": "Patricia",
+          "lastName": "Wan",
+          "description": "Patricia moved to town with Cleo to find a great story, not love. Will the love she found with Gabe last, or will his daughter cause them problems?",
+          "neighborhood": "G001",
+          "verifiedByGame": false
+        },
+        "needTrends": {}
+      },
+      {
+        "nid": 256,
+        "oid": 513,
+        "hunger": 44.13,
+        "familyNumber": 3,
+        "matchesCurrentFamily": true,
+        "wasHouseholdMemberThisLot": true,
+        "schoolGradeRaw": 6,
+        "jobLevelRaw": 0,
+        "jobPerformanceRaw": 0,
+        "ageRaw": 1,
+        "ghostFlagsRaw": 0,
+        "bodyFlagsRaw": 0,
+        "genderRaw": 1,
+        "genderPreferenceRaw": {
+          "male": 0,
+          "female": 0
+        },
+        "needsRaw": {
+          "hunger": 44.13,
+          "energy": 91.75,
+          "comfort": 0.0,
+          "hygiene": 89.81,
+          "bladder": -3.25,
+          "environment": 73.84,
+          "social": -0.48,
+          "fun": 44.62
+        },
+        "skillsRaw": {
+          "cleaning": 0,
+          "cooking": 0,
+          "charisma": 0,
+          "mechanical": 0,
+          "creativity": 0,
+          "body": 0,
+          "logic": 0
+        },
+        "hobbyEnthusiasmProbeRaw": {
+          "0xCC": 0,
+          "0xCD": 0,
+          "0xCE": 0,
+          "0xCF": 0,
+          "0xD0": 0,
+          "0xD1": 0,
+          "0xD2": 0,
+          "0xD3": 0,
+          "0xD4": 0,
+          "0xD5": 0
+        },
+        "predestinedHobbyProbeRaw": 208,
+        "personalityRaw": {
+          "neat": 600,
+          "outgoing": 700,
+          "active": 500,
+          "playful": 500,
+          "nice": 200
+        },
+        "aspirationRaw": 64,
+        "lifetimeAspirationRaw": {
+          "meter": 1800,
+          "unlock": 0,
+          "spent": 0
+        },
+        "loaded": true,
+        "inCurrentHousehold": true,
+        "hobbyEnthusiasmRaw": {
+          "cuisine": 0,
+          "arts_and_crafts": 0,
+          "film_and_literature": 0,
+          "sports": 0,
+          "games": 0,
+          "nature": 0,
+          "tinkering": 0,
+          "fitness": 0,
+          "science": 0,
+          "music_and_dance": 0
+        },
+        "hobbyEnthusiasmValue": {
+          "cuisine": 0,
+          "arts_and_crafts": 0,
+          "film_and_literature": 0,
+          "sports": 0,
+          "games": 0,
+          "nature": 0,
+          "tinkering": 0,
+          "fitness": 0,
+          "science": 0,
+          "music_and_dance": 0
+        },
+        "hobbyEnthusiasmPoints": {
+          "cuisine": 0,
+          "arts_and_crafts": 0,
+          "film_and_literature": 0,
+          "sports": 0,
+          "games": 0,
+          "nature": 0,
+          "tinkering": 0,
+          "fitness": 0,
+          "science": 0,
+          "music_and_dance": 0
+        },
+        "oneTrueHobby": "games",
+        "interestPoints": {
+          "politics": 1,
+          "money": 3,
+          "environment": 3,
+          "crime": 1,
+          "entertainment": 7,
+          "culture": 1,
+          "food": 0,
+          "health": 4,
+          "fashion": 4,
+          "sports": 6,
+          "paranormal": 4,
+          "travel": 8,
+          "work": 4,
+          "weather": 4,
+          "animals": 4,
+          "school": 5,
+          "toys": 8,
+          "sci_fi": 8
+        },
+        "interactiveOnLot": null,
+        "gameGender": "female",
+        "bodyTraits": [],
+        "isPregnant": false,
+        "pregnancyStage": null,
+        "genderPreference": {
+          "male": 0.0,
+          "female": 0.0
+        },
+        "ageStage": "baby",
+        "skillLevels": {
+          "cleaning": 0,
+          "cooking": 0,
+          "charisma": 0,
+          "mechanical": 0,
+          "creativity": 0,
+          "body": 0,
+          "logic": 0
+        },
+        "personalityPoints": {
+          "neat": 6,
+          "outgoing": 7,
+          "active": 5,
+          "playful": 5,
+          "nice": 2
+        },
+        "aspirationType": "grow_up",
+        "activeAspirations": [
+          {
+            "bit": 64,
+            "type": "grow_up"
+          }
+        ],
+        "benefitPoints": {
+          "unlocked": 0,
+          "spent": 0,
+          "unspent": 0
+        },
+        "hungerBand": "ok",
+        "bladderBand": "ok",
+        "energyBand": "ok",
+        "identity": null,
+        "needTrends": {}
+      }
+    ],
+    "otherLoadedCount": 0
+  }
+}

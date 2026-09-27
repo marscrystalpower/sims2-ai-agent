@@ -1,0 +1,30 @@
+{
+  "probe": "control-candidates-2",
+  "sampledUtc": "2026-09-27T03:15:31.890204+00:00",
+  "pid": 20052,
+  "operatorLabel": "grim-reaper-paused-save-disabled-build-buy-accessible-user-reported",
+  "raw": {
+    "offset68Byte": 0,
+    "offset69Byte": 0,
+    "offset80Signed": 0,
+    "offset84Signed": 0,
+    "buildBuyBlockerCountRaw": 0,
+    "buildBuyRestrictionActiveCandidate": false
+  },
+  "buildModeAvailable": null,
+  "buyModeAvailable": null,
+  "saveAvailable": null,
+  "interpretation": "Unvalidated candidate fields; not an emergency detector",
+  "apiContext": {
+    "fresh": true,
+    "sampleAgeSeconds": 1.0,
+    "screenCheckRecommended": true,
+    "sampledUtc": "2026-09-27T03:15:31Z",
+    "status": "lot",
+    "currentFamily": 3,
+    "gamePaused": true,
+    "gameModeProbeRaw": 3,
+    "gameHour": 16,
+    "gameMinute": 6
+  }
+}

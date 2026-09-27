@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    "https://sims.fandom.com/wiki/Aspiration_benefit",
+    "https://modthesims.info/wiki.php?title=Game_Help:Lifetime_Aspiration_Benefits"
+  ],
+  "scope": "Rules and possible benefits only; no per-Sim purchase state is inferred.",
+  "rules": {
+    "costPerPoint": 1,
+    "order": "Each branch requires its preceding tier.",
+    "primaryAspirationMaxTier": 4,
+    "secondaryAspirationSelectionCost": 1,
+    "secondaryAspirationPerkMaxTier": 3,
+    "secondaryAspirationOptions": [
+      "pleasure",
+      "family",
+      "romance",
+      "knowledge",
+      "fortune",
+      "popularity",
+      "grilled_cheese"
+    ],
+    "secondaryAspirationExcludesPrimary": true,
+    "growUpBenefits": false
+  },
+  "branches": {
+    "needs": {
+      "kind": "common",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Slower Motive Decay - Social and Comfort",
+          "effect": "Social and comfort fall more slowly."
+        },
+        {
+          "tier": 2,
+          "name": "Slower Motive Decay - Bladder and Hygiene",
+          "effect": "Bladder and hygiene fall more slowly."
+        },
+        {
+          "tier": 3,
+          "name": "Slower Motive Decay - Fun and Hunger",
+          "effect": "Fun and hunger fall more slowly."
+        },
+        {
+          "tier": 4,
+          "name": "Slower Motive Decay - Energy",
+          "effect": "Energy falls more slowly."
+        }
+      ]
+    },
+    "work": {
+      "kind": "common",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Life of Luxury",
+          "effect": "Vacation days accumulate faster."
+        },
+        {
+          "tier": 2,
+          "name": "Business Instinct",
+          "effect": "Favorable career chance-card outcomes become more likely."
+        },
+        {
+          "tier": 3,
+          "name": "Friends in High Places",
+          "effect": "Promotion requires one fewer family friend."
+        },
+        {
+          "tier": 4,
+          "name": "Plead for Job",
+          "effect": "Allows a fired Sim to call and ask for their job back."
+        }
+      ]
+    },
+    "pleasure": {
+      "kind": "aspiration",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Fast Metabolism",
+          "effect": "Fitness increases faster during exercise."
+        },
+        {
+          "tier": 2,
+          "name": "Slower Motive Decay - Hygiene and Bladder",
+          "effect": "Hygiene and bladder fall more slowly."
+        },
+        {
+          "tier": 3,
+          "name": "Write Restaurant Guide",
+          "effect": "Unlocks restaurant guide writing on a computer."
+        },
+        {
+          "tier": 4,
+          "name": "Rowdy Folk Song",
+          "effect": "Unlocks a song that improves relationships with nearby Sims."
+        }
+      ]
+    },
+    "family": {
+      "kind": "aspiration",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Grandma's Comfort Soup",
+          "effect": "Unlocks a soup that satisfies hunger and comfort and cures illness."
+        },
+        {
+          "tier": 2,
+          "name": "Slower Motive Decay - Fun and Comfort",
+          "effect": "Fun and comfort fall more slowly."
+        },
+        {
+          "tier": 3,
+          "name": "Plead with the Social Worker",
+          "effect": "Allows pleading when a social worker arrives."
+        },
+        {
+          "tier": 4,
+          "name": "Super Fertility",
+          "effect": "Increases the chance of twins."
+        }
+      ]
+    },
+    "romance": {
+      "kind": "aspiration",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Massive Attraction",
+          "effect": "Increases chemistry with other Sims."
+        },
+        {
+          "tier": 2,
+          "name": "Slower Motive Decay - Hygiene and Energy",
+          "effect": "Hygiene and energy fall more slowly."
+        },
+        {
+          "tier": 3,
+          "name": "Local Legend",
+          "effect": "Preferred-gender Sims walk by more often."
+        },
+        {
+          "tier": 4,
+          "name": "Smooth Talker",
+          "effect": "Relationships grow faster and furious love interests can be soothed."
+        }
+      ]
+    },
+    "knowledge": {
+      "kind": "aspiration",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Slower Motive Decay - Social and Fun",
+          "effect": "Social and fun fall more slowly."
+        },
+        {
+          "tier": 2,
+          "name": "Impart Knowledge",
+          "effect": "Unlocks sharing skills with a less skilled Sim."
+        },
+        {
+          "tier": 3,
+          "name": "Eureka!",
+          "effect": "Occasional rapid skill gains while learning."
+        },
+        {
+          "tier": 4,
+          "name": "Summon Aliens",
+          "effect": "Unlocks an abduction-inducing telescope interaction."
+        }
+      ]
+    },
+    "fortune": {
+      "kind": "aspiration",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Skilled Negotiator",
+          "effect": "Increases salary after promotions."
+        },
+        {
+          "tier": 2,
+          "name": "Slower Motive Decay - Fun and Comfort",
+          "effect": "Fun and comfort fall more slowly."
+        },
+        {
+          "tier": 3,
+          "name": "Financial Advice for Cash",
+          "effect": "Unlocks paid financial advice on a computer."
+        },
+        {
+          "tier": 4,
+          "name": "Investing",
+          "effect": "Periodic household investment gains or losses."
+        }
+      ]
+    },
+    "popularity": {
+      "kind": "aspiration",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Hospitality",
+          "effect": "More likely to bring a friend home from work."
+        },
+        {
+          "tier": 2,
+          "name": "Slower Motive Decay - Bladder and Energy",
+          "effect": "Bladder and energy fall more slowly."
+        },
+        {
+          "tier": 3,
+          "name": "Three-Way Calling",
+          "effect": "Allows a third Sim into a phone conversation."
+        },
+        {
+          "tier": 4,
+          "name": "Fast Friends",
+          "effect": "Positive interactions give an additional relationship boost."
+        }
+      ]
+    },
+    "grilled_cheese": {
+      "kind": "aspiration",
+      "benefits": [
+        {
+          "tier": 1,
+          "name": "Bottomless Stomach",
+          "effect": "Gains weight more slowly."
+        },
+        {
+          "tier": 2,
+          "name": "Slower Motive Decay - Bladder",
+          "effect": "Bladder falls more slowly."
+        },
+        {
+          "tier": 3,
+          "name": "Paint Grilled Cheese",
+          "effect": "Unlocks grilled-cheese paintings."
+        },
+        {
+          "tier": 4,
+          "name": "Conjure Grilled Cheese",
+          "effect": "Creates a sandwich at a cost to comfort and energy."
+        }
+      ]
+    }
+  }
+}

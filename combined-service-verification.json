@@ -1,0 +1,22 @@
+{
+  "api": 1,
+  "alarmVersion": 2,
+  "experimental": true,
+  "controlRestriction": {
+    "status": "ok",
+    "sampledUtc": "2026-09-26T20:32:43.425088-07:00",
+    "blockerCount": 0,
+    "restrictionActive": false,
+    "saveEnableCounterRaw": 1,
+    "saveGateRestricted": false,
+    "reasons": [],
+    "currentFamily": 3,
+    "error": null
+  },
+  "alarms": [],
+  "latestAlarm": null,
+  "nextCursor": "6e55f951e4bf4fe782ffa61b634e2591:0",
+  "reset": false,
+  "retention": 256,
+  "consumerAction": "Inspect once per unseen alarm ID; bypass quiet hours. Historical alarms may already be resolved; check current state."
+}
