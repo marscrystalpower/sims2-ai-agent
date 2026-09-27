@@ -15,6 +15,7 @@ from control_probe import DEFAULT_EXE
 from preferences import snapshot as preference_snapshot
 from chemistry import attach as attach_chemistry
 from lot_session import LotSession
+from continuity import Store, Continuity, Worker as ContinuityWorker, decision_summary, DEFAULT_DIRECTORY
 
 
 CURSOR = re.compile(r"^([0-9a-f]+)\.([0-9a-f]+)\.(\d+)$")
@@ -631,6 +632,7 @@ class ExclusiveHTTPServer(ThreadingHTTPServer):
 
 
 class ApiHandler(BaseHTTPRequestHandler):
+    continuity = None
     preference_pid = None
     preference_exe = DEFAULT_EXE
     alarm = None
@@ -655,7 +657,14 @@ class ApiHandler(BaseHTTPRequestHandler):
             return
         url = urlsplit(self.path)
         try:
-            if url.path == '/v1/preferences':
+            if url.path in ('/v1/continuity', '/v1/decision') and not url.query:
+                if self.continuity is None:
+                    self.reply(503, {'status': 'unavailable', 'error': 'Continuity needs an explicit neighborhood'})
+                else:
+                    obs = observation(self.mods, None, self.name_context, self.alarm)
+                    memory = self.continuity.view(obs)
+                    self.reply(200, memory if url.path == '/v1/continuity' else decision_summary(obs, memory))
+            elif url.path == '/v1/preferences':
                 params = parse_qs(url.query, keep_blank_values=True)
                 if (set(params) != {'nid'} or len(params['nid']) != 1 or
                         not params['nid'][0].isascii() or not params['nid'][0].isdigit() or
@@ -725,6 +734,8 @@ def main():
     parser.add_argument("--names", type=Path, help="name map for --neighborhood")
     parser.add_argument('--alarm-pid', type=int, help='Enable read-only restriction alarm for this game PID')
     parser.add_argument('--alarm-exe', type=Path, default=DEFAULT_EXE)
+    parser.add_argument('--continuity-directory', type=Path, default=DEFAULT_DIRECTORY,
+                        help='Local household memory directory; use a different directory for a reset/cloned save')
     args = parser.parse_args()
     configured_game_pid = args.alarm_pid
     if not args.mods.is_dir():
@@ -744,6 +755,12 @@ def main():
         ApiHandler.alarm = RestrictionWatcher(args.mods, args.alarm_pid, args.alarm_exe,
                                             context_observer=lot_session.update)
         ApiHandler.alarm.start()
+    continuity_worker = None
+    if args.neighborhood:
+        ApiHandler.continuity = Continuity(Store(args.continuity_directory / 'households.sqlite3'), args.neighborhood)
+        continuity_worker = ContinuityWorker(ApiHandler.continuity,
+            lambda cursor: observation(args.mods, cursor, ApiHandler.name_context, ApiHandler.alarm))
+        continuity_worker.start()
     print("TS2Bridge local API: http://127.0.0.1:%d/v1/lot" % server.server_port,
           flush=True)
     try:
@@ -751,6 +768,8 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
+        if continuity_worker:
+            continuity_worker.stop()
         if ApiHandler.alarm:
             ApiHandler.alarm.stop()
         server.server_close()
@@ -758,4 +777,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
