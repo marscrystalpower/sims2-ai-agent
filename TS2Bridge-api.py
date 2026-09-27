@@ -12,6 +12,9 @@ from threading import Lock
 from urllib.parse import parse_qs, urlsplit
 from restriction_alarm import RestrictionWatcher
 from control_probe import DEFAULT_EXE
+from preferences import snapshot as preference_snapshot
+from chemistry import attach as attach_chemistry
+from lot_session import LotSession
 
 
 CURSOR = re.compile(r"^([0-9a-f]+)\.([0-9a-f]+)\.(\d+)$")
@@ -122,6 +125,7 @@ class NeedTrendTracker:
 
 
 need_trend_tracker = NeedTrendTracker()
+lot_session = LotSession()
 
 
 def load_name_context(neighborhood, path):
@@ -156,6 +160,20 @@ def identity(nid, context):
 def lot_snapshot(mods, context=None):
     with (mods / "TS2Bridge-state.json").open("r", encoding="utf-8") as file:
         state = json.load(file)
+    age = None
+    try:
+        when = datetime.fromisoformat(state['sampledUtc'].replace('Z', '+00:00'))
+        age = (datetime.now(timezone.utc) - when).total_seconds()
+    except (KeyError, TypeError, ValueError):
+        pass
+    fresh = (state.get('status') == 'lot' and type(state.get('currentFamily')) is int and
+             age is not None and -5 <= age <= 15)
+    session_id, session_start = lot_session.update(state, fresh)
+    source_status = state.get('status')
+    if not fresh:
+        state = dict(state, status='unavailable', sims=[], currentFamily=None,
+                     selectedNid=None, gameHour=None, gameMinute=None,
+                     householdFunds=None, fundsProbeRaw=None)
     current = state.get("currentFamily") if state.get("status") == "lot" else None
     paused_raw = state.get("pausedProbeRaw")
     sims = []
@@ -168,14 +186,6 @@ def lot_snapshot(mods, context=None):
                          isinstance(enthusiasm, dict) and
                          all(type(enthusiasm.get(slot)) is int and
                              0 <= enthusiasm[slot] <= 2000 for slot, _ in HOBBY_SLOTS))
-        view["hobbyEnthusiasmRaw"] = (
-            {name: enthusiasm[slot] for slot, name in HOBBY_SLOTS}
-            if valid_hobbies else None
-        )
-        view["hobbyEnthusiasmValue"] = (
-            {name: min(1000, enthusiasm[slot]) for slot, name in HOBBY_SLOTS}
-            if valid_hobbies else None
-        )
         view["hobbyEnthusiasmPoints"] = (
             {name: min(10, enthusiasm[slot] // 100) for slot, name in HOBBY_SLOTS}
             if valid_hobbies else None
@@ -185,6 +195,10 @@ def lot_snapshot(mods, context=None):
             HOBBY_NAMES.get(predestined)
             if view["inCurrentHousehold"] and type(predestined) is int else None
         )
+        # Keep the agent-facing hobby summary compact; native files retain probes.
+        for field in ("hobbyEnthusiasmProbeRaw", "predestinedHobbyProbeRaw",
+                      "hobbyEnthusiasmRaw", "hobbyEnthusiasmValue"):
+            view.pop(field, None)
         interests = sim.get("interestProbeRaw")
         valid_interests = (
             view["inCurrentHousehold"] and isinstance(interests, dict) and
@@ -290,6 +304,12 @@ def lot_snapshot(mods, context=None):
         "bridge": state.get("bridge"),
         "sampledUtc": state.get("sampledUtc"),
         "status": state.get("status"),
+        "sourceStatus": source_status,
+        "fresh": fresh,
+        "sampleAgeSeconds": round(age, 1) if age is not None else None,
+        "gamePid": state.get('pid'),
+        "lotSessionId": session_id,
+        "lotSessionStartedUtc": session_start,
         "gameHour": state.get("gameHour"),
         "gameMinute": state.get("gameMinute"),
         "pausedProbeRaw": state.get("pausedProbeRaw") if (
@@ -383,6 +403,7 @@ def relationship_snapshot(mods, context=None, household=None):
             view["viewerInCurrentHousehold"] = viewer in household_nids
             view["otherInCurrentHousehold"] = other in household_nids
             pairs.append(view)
+    attach_chemistry(pairs, household['sims'], supported=household.get('bridge') == '1.33')
     return {"api": 1, "status": raw.get("status"), "sampledUtc": raw.get("sampledUtc"),
             "currentFamily": raw.get("currentFamily"), "sampleAgeSeconds": age,
             "fresh": fresh, "pairs": pairs,
@@ -542,11 +563,30 @@ def observation(mods, after, context=None, alarm=None):
         except ValueError:
             pass
     fresh = household["status"] == "lot" and age is not None and -5 <= age <= 15
+    # Diagnostic event endpoints retain history; observations are visit-scoped.
+    started = household.get('lotSessionStartedUtc')
+    def current_change(change):
+        event = change.get('observation') or {}
+        if not fresh or event.get('currentFamily') != household.get('currentFamily'):
+            return False
+        if household.get('gamePid') is not None and event.get('pid') != household['gamePid']:
+            return False
+        if started:
+            try:
+                return datetime.fromisoformat(event['sampledUtc'].replace('Z', '+00:00')) >= datetime.fromisoformat(started.replace('Z', '+00:00'))
+            except (KeyError, TypeError, ValueError):
+                return False
+        return True
+    changes['changes'] = [change for change in changes['changes'] if current_change(change)]
     # A pause is actionable as a visual inspection cue, not evidence of a
     # dialog: manual pause and the phonebook both set the same game global.
     screen_check = fresh and household["gamePaused"] is True
     alarm_snapshot = alarm.state.snapshot() if alarm else None
     restriction = alarm_snapshot['controlRestriction'] if alarm_snapshot else None
+    if restriction and (not fresh or restriction.get('currentFamily') != household['currentFamily']):
+        restriction = {'status': 'unknown', 'restrictionActive': None,
+                       'blockerCount': None, 'saveEnableCounterRaw': None,
+                       'saveGateRestricted': None, 'error': 'No aligned active household'}
     restriction_active = bool(restriction and restriction['restrictionActive'] is True)
     trends = need_trend_tracker.update(household, when, fresh)
     for sim in household["sims"]:
@@ -568,7 +608,9 @@ def observation(mods, after, context=None, alarm=None):
                               "game_paused" if screen_check else None),
         "alarmVersion": alarm_snapshot['alarmVersion'] if alarm_snapshot else None,
         "controlRestriction": restriction,
-        "latestAlarm": alarm_snapshot['latestAlarm'] if alarm_snapshot else None,
+        "latestAlarm": (alarm_snapshot['latestAlarm'] if alarm_snapshot and fresh and
+                        alarm_snapshot['latestAlarm'] and
+                        alarm_snapshot['latestAlarm'].get('currentFamily') == household['currentFamily'] else None),
         "alarmCursor": alarm_snapshot['nextCursor'] if alarm_snapshot else None,
         "alarmEnabled": alarm is not None,
     }
@@ -584,6 +626,8 @@ class ExclusiveHTTPServer(ThreadingHTTPServer):
 
 
 class ApiHandler(BaseHTTPRequestHandler):
+    preference_pid = None
+    preference_exe = DEFAULT_EXE
     alarm = None
     mods = None
     name_context = None
@@ -606,7 +650,32 @@ class ApiHandler(BaseHTTPRequestHandler):
             return
         url = urlsplit(self.path)
         try:
-            if url.path == "/v1/alarms":
+            if url.path == '/v1/preferences':
+                params = parse_qs(url.query, keep_blank_values=True)
+                if (set(params) != {'nid'} or len(params['nid']) != 1 or
+                        not params['nid'][0].isascii() or not params['nid'][0].isdigit() or
+                        not 1 <= int(params['nid'][0]) <= 65535):
+                    raise ValueError('Expected one nid between 1 and 65535')
+                if self.preference_pid is None:
+                    self.reply(503, {'status': 'unavailable', 'error': 'Game PID not configured'})
+                else:
+                    try:
+                        before = lot_snapshot(self.mods, self.name_context)
+                        nid = int(params['nid'][0])
+                        if (not before['fresh'] or before.get('gamePid') != self.preference_pid or
+                                not any(sim['nid'] == nid for sim in before['sims'])):
+                            raise ValueError('Requested Sim is not in the current fresh lot context')
+                        result = preference_snapshot(self.preference_pid, self.preference_exe, int(params['nid'][0]))
+                        after = lot_snapshot(self.mods, self.name_context)
+                        if (not after['fresh'] or before['lotSessionId'] != after['lotSessionId'] or
+                                not any(sim['nid'] == nid for sim in after['sims'])):
+                            raise ValueError('Lot context changed during preference read')
+                        result['lotSessionId'] = after['lotSessionId']
+                    except (ValueError, OSError) as error:
+                        self.reply(503, {'status': 'unavailable', 'error': str(error)})
+                    else:
+                        self.reply(200, result)
+            elif url.path == "/v1/alarms":
                 params = parse_qs(url.query, keep_blank_values=True)
                 if (set(params) - {'after'} or len(params.get('after', [])) > 1 or
                         params.get('after') == ['']):
@@ -661,9 +730,12 @@ def main():
     except (ValueError, OSError, KeyError, json.JSONDecodeError) as error:
         parser.error(str(error))
     ApiHandler.mods = args.mods
+    ApiHandler.preference_pid = args.alarm_pid
+    ApiHandler.preference_exe = args.alarm_exe
     server = ExclusiveHTTPServer(("127.0.0.1", args.port), ApiHandler)
     if args.alarm_pid is not None:
-        ApiHandler.alarm = RestrictionWatcher(args.mods, args.alarm_pid, args.alarm_exe)
+        ApiHandler.alarm = RestrictionWatcher(args.mods, args.alarm_pid, args.alarm_exe,
+                                            context_observer=lot_session.update)
         ApiHandler.alarm.start()
     print("TS2Bridge local API: http://127.0.0.1:%d/v1/lot" % server.server_port,
           flush=True)
