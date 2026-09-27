@@ -144,10 +144,11 @@ class RestrictionWatcher:
         age = (datetime.now(timezone.utc) - when).total_seconds()
         if state.get('status') != 'lot' or not -5 <= age <= 15:
             raise ValueError('Bridge lot state unavailable or stale')
-        if state.get('pid') != self.pid:
+        if state.get('pid') is not None and state['pid'] != self.pid:
             self.state.leave_lot()
             raise ValueError('Game process changed; restart the API')
         if self.context_observer:
+            state = dict(state, pid=self.pid)
             self.context_observer(state, True)
         family = state.get('currentFamily')
         if type(family) is not int:
@@ -176,3 +177,4 @@ class RestrictionWatcher:
     def stop(self):
         self.stop_event.set()
         self.thread.join(timeout=5)
+
