@@ -16,6 +16,8 @@ class PreferenceTests(unittest.TestCase):
             ([256, 4, 4, 0, 0, 0], ['Facial Hair', 'Brown Hair'], ['Fatness']),
             ([64, 16, 0, 8, 0, 0], ['Underwear', 'Custom Hair'], ['Black Hair']),
             ([64, 64, 0, 0, 0, 1], ['Underwear', 'Hard Worker'], ['Robots']),
+            ([8, 4, 128, 0, 0, 0], ['Fitness', 'Brown Hair'], ['Vampirism']),
+            ([0, 4096, 0, 0, 2, 4], ['Creative', 'Plantsimism'], ['Lycanthropy']),
         ):
             result = decode(words)
             self.assertEqual([e['label'] for e in result['turnOns']], ons)
@@ -69,3 +71,4 @@ class PreferenceTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
