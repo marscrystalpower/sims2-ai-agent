@@ -22,7 +22,7 @@ Quiet nights (roughly 23:00–06:00 game time when the household is sleeping) no
 
 ## Respond to signals, then inspect the situation
 
-The combined API is at `http://127.0.0.1:8765`. `/v1/observe` supplies household observations and inspection cues; `/v1/alarms` supplies restriction alarms. Follow the protocol in `outputs/alarm-api/README.md` when using it. Alarm and bridge-event cursors are separate. Remember processed alarm IDs and each cursor; reading an alarm does not consume it for other clients.
+The combined API is at `http://127.0.0.1:8765`. `/v1/observe` supplies household observations and inspection cues; `/v1/alarms` supplies restriction alarms. Follow the protocol in `README.md` when using it. Alarm and bridge-event cursors are separate. Remember processed alarm IDs and each cursor; reading an alarm does not consume it for other clients.
 
 A new alarm requests scene inspection, including overnight. It does not identify the emergency or mandate a particular intervention. Build/Buy blockers caught tested fires and burglaries; the separate save gate caught Grim's visit while Build/Buy remained accessible. Neither is a universal emergency detector. Keep hunger, death, and other event observations as independent reasons to pay attention.
 
@@ -44,10 +44,10 @@ Maintain `STORY.md` as a small continuity note when meaningful events occur: con
 
 Prefer neighborhood plus NID for identity when reliable; do not infer identity from list position. Name maps may lag new births, and a loaded Sim is not necessarily physically present on the lot. Preserve uncertainty rather than inventing missing biography or relationship causes. Read current observations before treating old notes as live state.
 
-Keep this file focused on stable judgment and preferences. Put changing household facts in `STORY.md`, technical instructions in the API README, and probe evidence in `outputs/control-probe-notes.md`. Nothing here creates an autonomous scheduler or guarantees that an agent will wake when an alarm appears.
+Keep this file focused on stable judgment and preferences. Put changing household facts in `STORY.md`, technical instructions in the API README, and probe evidence in `control-probe-notes.md`. Nothing here creates an autonomous scheduler or guarantees that an agent will wake when an alarm appears.
 
 ## Project entry points
 
-The maintained combined API and its helper modules live in `outputs/alarm-api/`. Launch with `Start-AlarmApi.ps1`; do not also run the original API in the game's `mods` directory. The original API there is a fallback. The game's ASI and observation files in `mods` remain necessary. The launcher pins the game PID, so restart the service after a game restart. Verify `alarmVersion=2`, fresh observations, and `status=ok`; do not hardcode a previous process ID.
+The maintained combined API and its helper modules live at this repository's root. Launch with `Start-Bridge.ps1 -Mods <your game's mods folder>`; do not also run the original API in the game's `mods` directory. The original API there is a fallback. The game's ASI and observation files in `mods` remain necessary. The launcher pins the game PID, so restart the service after a game restart. Verify `alarmVersion=2`, fresh observations, and `status=ok`; do not hardcode a previous process ID.
 
-For development, retain executable/signature guards and read-only memory access. Test meaningful alarm transitions, unknown readings, deduplication, and cursor behavior before claiming a fix. Distinguish replay/unit tests from live gameplay evidence. Do not bundle game binaries, saves, logs, screenshots, or local identity data into a public repository; source publishing is a separate task.
+For development, retain executable/signature guards and read-only memory access. Test meaningful alarm transitions, unknown readings, deduplication, and cursor behavior before claiming a fix. Distinguish replay/unit tests from live gameplay evidence. Do not bundle game binaries, saves, logs, screenshots, or new local identity data into a public repository. Existing uploaded snapshots are historical evidence; use the README for current setup. The user authorizes maintaining this repository; preserve unrelated changes and verify updates.
