@@ -28,6 +28,20 @@ class AlarmState:
                         'restrictionActive': None, 'error': 'No sample yet'}
         self.last_tick = None
 
+    def leave_lot(self):
+        """Confirmed lot exit retires the prior visit's alarm history."""
+        with self.lock:
+            if self.context is not None:
+                self.session, self.sequence = uuid.uuid4().hex, 0
+                self.events.clear()
+                self.latest = None
+                self.context = self.active = None
+                self.reasons = set()
+            self.current = {'status': 'unknown', 'blockerCount': None,
+                            'restrictionActive': None, 'saveEnableCounterRaw': None,
+                            'saveGateRestricted': None, 'reasons': None,
+                            'error': 'No active household'}
+
     def update(self, count, context=None, error=None, *, save_counter=1):
         with self.lock:
             now = utc()
@@ -45,6 +59,9 @@ class AlarmState:
             if type(save_counter) is not int or not -(2**31) <= save_counter < 2**31:
                 raise ValueError('Invalid save counter')
             if context != self.context:
+                self.session, self.sequence = uuid.uuid4().hex, 0
+                self.events.clear()
+                self.latest = None
                 self.context, self.active = context, None
                 self.reasons = set()
             reasons = set()
@@ -109,18 +126,29 @@ class AlarmState:
 
 
 class RestrictionWatcher:
-    def __init__(self, mods, pid, exe, reader=sample):
+    def __init__(self, mods, pid, exe, reader=sample, context_observer=None):
         self.mods, self.pid, self.exe, self.reader = mods, pid, exe, reader
+        self.context_observer = context_observer
         self.state = AlarmState()
         self.stop_event = Event()
         self.thread = Thread(target=self.run, name='restriction-alarm', daemon=True)
 
     def context(self):
         state = json.loads((self.mods / 'TS2Bridge-state.json').read_text(encoding='utf-8'))
+        if state.get('status') != 'lot':
+            if self.context_observer:
+                self.context_observer(state, False)
+            self.state.leave_lot()
+            raise ValueError('No active household')
         when = datetime.fromisoformat(state['sampledUtc'].replace('Z', '+00:00'))
         age = (datetime.now(timezone.utc) - when).total_seconds()
         if state.get('status') != 'lot' or not -5 <= age <= 15:
             raise ValueError('Bridge lot state unavailable or stale')
+        if state.get('pid') != self.pid:
+            self.state.leave_lot()
+            raise ValueError('Game process changed; restart the API')
+        if self.context_observer:
+            self.context_observer(state, True)
         family = state.get('currentFamily')
         if type(family) is not int:
             raise ValueError('Unknown family')
