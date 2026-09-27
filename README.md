@@ -43,3 +43,38 @@ python -m unittest discover -s . -p 'test_*.py' -v
 Tests use synthetic household state and recorded restriction values; no game, private files, or installed game path is needed. They cover independent triggers, duplicate suppression, recovery, failures, stale data, startup, cursors, and HTTP integration. Live evidence additionally confirmed a save-only Grim alarm and recovery, and entering Maya in a baby naming prompt. Twins and universal emergency coverage have not been validated.
 
 `control-probe-notes.md` and `TS2Bridge-recovered-context.md` preserve historical investigation. Their old paths/PIDs and temporary port8766 references are not current setup instructions. The repository-root launcher and this README are the portable entry points; the original local workspace remains separate until explicitly migrated.
+
+
+## On-demand preference decoder
+
+GET /v1/preferences?nid=255 reads one loaded Sim using --alarm-pid/--alarm-exe. Restart the API after code updates; no additional service or routine scan is needed. Each request reads anew. The sampler verifies the supported executable hash, signatures and roster/identity stability, using read-only memory access. Missing Sims, unsupported builds or failed reads return503 status=unavailable rather than empty preferences. sampledUtc marks completion, not an atomic game tick.
+
+Responses include rawWords (B6/B7/B8/B9/C9/CA), turnOns/turnOffs entries with label/bank/mask/validation, unknownBits, warnings and fullyLiveChecked. live_checked means checked against a user-reported panel in that role on this build; static_candidate means inferred from installed tooltip order and assignment-bank boundaries. Unknown bits and unexpected counts remain explicit. Zero words are not proof of no preferences, especially for children/babies. No age eligibility or romantic suitability is inferred.
+
+The34 candidate names include extra expansion storage. Robots turn-off is live-checked in the third bank; third-bank turn-ons and other unobserved labels remain provisional. Mod overrides are not validated. Mutual chemistry bolts are not implemented by this endpoint. Use occasional purposeful checks under AGENTS.md; hidden attraction scores must not rank partners.
+
+Validation:11 decoder/alarm/HTTP tests passed, covering four reported panels, unknown bits, role-specific validation, invalid requests, and read failures. A direct live read also matched NID255's Underwear/Hard Worker/Robots panel.
+
+## Compact hobby summaries
+
+Sim summaries in /v1/lot, /v1/household and /v1/observe retain hobbyEnthusiasmPoints (solid points0–10) and oneTrueHobby. Redundant hobbyEnthusiasmRaw/hobbyEnthusiasmValue and internal hobbyEnthusiasmProbeRaw/predestinedHobbyProbeRaw are omitted. Native bridge files still retain their probe values for diagnostics. API restart required after this source change. Verified against live household input: Patricia cuisine1, music_and_dance2, oneTrueHobby music_and_dance; omitted fields absent across returned household Sims.
+
+## Mutual chemistry estimates
+
+Relationship pairs in /v1/relationships and /v1/observe now include mutualChemistry: status estimated/unknown, category poor/none/mild/medium/strong (or null), bolts -1/0/1/2/3 (or null), and validation/source or unknown reason. No aggregate numerical score is exposed. Original rawSlots remain available for diagnostics.
+
+Formula traced from installed global BHAV114 and BCON115: truncate directional average toward zero; if either score is strictly below-25 and averaged score is strictly above0, subtract50. Categories use <=-25, <=0, <35, <90 and >=90. Operator meanings cross-checked with https://modthesims.info/wiki.php?title=Operator . One/two/three/poor UI examples match; zero category and exact threshold transitions have not been live-validated. These are cache-derived estimates, not direct UI readings; effective mod overrides, cache recalculation and all attraction eligibility conditions are not verified.
+
+Only fresh supported bridge1.33 pairs are considered. Missing/duplicate directions, suspicious slot layout (including observed shifted slot9 value74), unknown acquaintance/family information, family ties, or missing/incompatible age context return unknown. Unknown is not zero chemistry or proof of romantic eligibility. Known adult/elder pairs and teen/teen pairs can receive estimates, but this does not establish availability, orientation compatibility or absence of commitments. Uncovered visitors may remain unknown. Stale relationship snapshots retain existing behavior of returning no pairs with fresh=false.
+
+14 tests passed, including four observed pair examples, formula edges, missing data, suspicious layout and eligibility guards, plus preference/alarm/HTTP regression. Live relationship_snapshot confirms NID255/Jules27 poor with status estimated. Restart the API to activate this source change. Chemistry is story context, not a mandate or numerical partner ranking.
+
+## Household visits and unavailable data
+
+Live lot/household responses now expose fresh, sourceStatus, sampleAgeSeconds, gamePid, lotSessionId and lotSessionStartedUtc. Stale or between-lot readings return status unavailable, empty Sims and null active family/selection/funds. Relationships retain fresh=false with no pairs when unavailable. Preferences require a fresh, matching game PID and a currently loaded Sim before and after the memory read.
+
+The background watcher observes departures every2 seconds. A confirmed exit, a family change, or a game PID change retires the active visit; re-entering starts a new lotSessionId. Very brief unobserved transitions cannot be guaranteed. Missing/stale samples alone are not proof of departure. Need trends already reset on unavailable data or family changes. /v1/observe filters changes to the active family, process and visit start. /v1/events and /v1/changes remain historical diagnostics; consumers must not replay them as current action requests.
+
+Alarm retention is now per active household visit: confirmed exit/family change discards its in-memory alarms and resets the alarm cursor. Transient read failures within a visit still preserve deduplication. An old cursor reports reset=true. Native logs are not deleted or truncated. Store concise story continuity by neighborhood and family separately, and retire the old visit's action queue/inspection cache when lotSessionId changes. The API does not itself store story notes or confirm saves. Across different neighborhoods the operator must restart with the corresponding name map; family and NID alone are not globally unique.
+
+Live transition test: family3 -> neighborhood -> Greenman family2. Neighborhood returned no Sims/pairs and unknown restriction; Greenman returned only Daisy/Rose/Jason. Stale/process/visit guards are covered by offline tests. Restarting the game requires restarting the API to bind its new PID.
