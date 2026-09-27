@@ -54,7 +54,8 @@ class AlarmTests(unittest.TestCase):
         state.update(3, 3)
         self.assertEqual(len(state.snapshot()['alarms']), 1)
         state.update(1, 4)
-        self.assertEqual(len(state.snapshot()['alarms']), 2)
+        self.assertEqual(len(state.snapshot()['alarms']), 1)
+        self.assertEqual(state.snapshot()['latestAlarm']['currentFamily'], 4)
 
     def test_stale_sample_is_unknown(self):
         state = AlarmState()
