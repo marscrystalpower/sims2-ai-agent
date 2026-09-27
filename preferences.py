@@ -13,8 +13,9 @@ BANKS = (
 )
 # Evidence is role-specific: a checked turn-off is not a checked turn-on.
 CHECKED = {
-    'turnOns': {'Facial Hair', 'Glasses', 'Brown Hair', 'Underwear', 'Custom Hair', 'Hard Worker'},
-    'turnOffs': {'Stink', 'Fatness', 'Black Hair', 'Robots'},
+    'turnOns': {'Facial Hair', 'Glasses', 'Brown Hair', 'Underwear', 'Custom Hair', 'Hard Worker',
+                'Fitness', 'Plantsimism', 'Creative'},
+    'turnOffs': {'Stink', 'Fatness', 'Black Hair', 'Robots', 'Vampirism', 'Lycanthropy'},
 }
 INDICES = ('0xb6', '0xb7', '0xb8', '0xb9', '0xc9', '0xca')
 
@@ -49,3 +50,4 @@ def snapshot(pid, exe, nid):
             'nid': raw['nid'], 'family': raw['family'], 'ageRaw': raw['ageRaw'],
             'source': 'guarded_read_only_memory', 'decoderVersion': 1,
             'coverage': 'requested_loaded_sim_only', **decode(raw['candidateWords'])}
+
