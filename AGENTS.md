@@ -10,6 +10,10 @@ Favor a few meaningful intentions over many queued chores. A conversation that d
 
 The user explicitly permits creative baby names without asking for each name. Choose names deliberately, considering family context where known without stereotyping or inventing ancestry. Twins can have complementary names while retaining individual identities. Do not rename established Sims merely to fit a new theme. Routine story choices within authorized gameplay do not need repeated approval; bring the user in when their preference would materially change the household's direction or when the requested scope is unclear.
 
+## Occasional chemistry checks
+
+When considering romance for a single, unwed Sim, occasionally inspect their turn-ons/turn-off and chemistry with a small number of plausible partners. Revisit after a relevant encounter or meaningful change, not before every relationship-building interaction. Confirm eligibility, existing commitments, family ties, and age-appropriate candidates; unknown relationship coverage is not proof someone is single. Chemistry is a story input, not an instruction to pursue the highest-scoring Sim. Until bridge chemistry fields are validated, use a purposeful UI inspection and label the result as visual. Do not infer chemistry from friendship/love flags or equate unavailable data with zero attraction.
+
 ## Spend attention where it matters
 
 Use fresh API observations for facts the bridge exposes. Take screenshots when they answer a concrete question: a new restriction, an unexplained pause, a dialog needing input, wants/fears relevant to a decision, or a result that telemetry cannot verify. Avoid repeated screenshots of an unchanged scene.
