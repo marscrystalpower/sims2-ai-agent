@@ -7,6 +7,7 @@ from datetime import datetime, timezone, timedelta
 from unittest.mock import patch
 from lot_session import LotSession
 from restriction_alarm import AlarmState
+from restriction_alarm import RestrictionWatcher
 
 spec = importlib.util.spec_from_file_location('transition_api', Path(__file__).with_name('TS2Bridge-api.py'))
 api = importlib.util.module_from_spec(spec)
@@ -14,6 +15,23 @@ spec.loader.exec_module(api)
 
 
 class TransitionTests(unittest.TestCase):
+    def test_native_state_without_pid(self):
+        from io import StringIO
+        state = {'status': 'lot', 'currentFamily': 2, 'sims': [],
+                 'sampledUtc': datetime.now(timezone.utc).isoformat()}
+        with patch.object(Path, 'open', return_value=StringIO(json.dumps(state))), patch.object(api, 'configured_game_pid', 123):
+            result = api.lot_snapshot(Path('.'))
+        self.assertTrue(result['fresh'])
+        self.assertEqual(result['gamePid'], 123)
+        watcher = RestrictionWatcher(Path('.'), 123, Path('game.exe'),
+            reader=lambda *args: {'buildBuyBlockerCountRaw': 0, 'offset84Signed': 1})
+        with patch.object(Path, 'read_text', return_value=json.dumps(state)):
+            watcher.tick()
+        self.assertEqual(watcher.state.snapshot()['controlRestriction']['status'], 'ok')
+        with patch.object(Path, 'read_text', return_value=json.dumps(dict(state, pid=999))):
+            watcher.tick()
+        self.assertEqual(watcher.state.snapshot()['controlRestriction']['status'], 'unknown')
+
     def test_trends_reset_on_same_family_new_visit(self):
         tracker = api.NeedTrendTracker()
         now = datetime.now(timezone.utc)
